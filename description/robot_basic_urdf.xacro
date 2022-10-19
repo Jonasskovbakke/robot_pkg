@@ -208,8 +208,8 @@
         </link>
 
         <!-- gazebo plugin from xacro file -->
-        <xacro:robot_gazebo robot_name="${robot_name}"/>
-        <xacro:robot_hardware_interface robot_name="${robot_name}"/>
+        <!--xacro:robot_gazebo robot_name="${robot_name}"/-->
+        <!--xacro:robot_hardware_interface robot_name="${robot_name}"/-->
     </xacro:macro>
 
 </robot>
