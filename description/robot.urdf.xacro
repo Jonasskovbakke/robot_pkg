@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro"  name="robot">
+    
+    <!-- Include macro for creating urdf -->
+    <xacro:include filename="robot_basic_urdf.xacro" />
+
+    <!-- Set arguments for macro -->
+    <xacro:arg name="robot_name" default=""/>
+    
+    <!-- Create link for robot base to connect to -->
+    <link name="world"/>
+
+    <!-- Use macro to make urdf -->
+    <xacro:create_robot parent="world" robot_name="$(arg robot_name)" />
+
+</robot>

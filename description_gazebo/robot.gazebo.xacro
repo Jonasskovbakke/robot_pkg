@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:macro name="robot_gazebo" params="robot_name:=^|robot">
+
+        <!-- ros_control-plugin -->
+        <gazebo>
+            <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+                <!--parameters>/home/jonas/ros2_robot_test/install/robot_pkg/share/robot_pkg/robot_controllers.yml</parameters -->
+                <parameters>$(find lbr_bringup)/robot_controllers.yml</parameters>
+                <robotNamespace>/${robot_name}</robotNamespace>
+            </plugin>
+        </gazebo>
+
+        <!-- link 1 -->
+        <gazebo reference="${robot_name}_link_1">
+            <mu1>0.2</mu1>
+            <mu2>0.2</mu2>
+            <material>Gazebo/Orange</material>
+        </gazebo>
+
+        <!-- link 2 -->
+        <gazebo reference="${robot_name}_link_2">
+            <mu1>0.2</mu1>
+            <mu2>0.2</mu2>
+            <material>Gazebo/Orange</material>
+        </gazebo>
+
+        <!-- link 3 -->
+        <gazebo reference="${robot_name}_link_3">
+            <mu1>0.2</mu1>
+            <mu2>0.2</mu2>
+            <material>Gazebo/Orange</material>
+        </gazebo>
+
+        <!-- link 4 -->
+        <gazebo reference="${robot_name}_link_4">
+            <mu1>0.2</mu1>
+            <mu2>0.2</mu2>
+            <material>Gazebo/Orange</material>
+        </gazebo>
+
+        <!-- link 5 -->
+        <gazebo reference="${robot_name}_link_5">
+            <mu1>0.2</mu1>
+            <mu2>0.2</mu2>
+            <material>Gazebo/Orange</material>
+        </gazebo>
+
+        <!-- link 6 -->
+        <gazebo reference="${robot_name}_link_6">
+            <mu1>0.2</mu1>
+            <mu2>0.2</mu2>
+            <material>Gazebo/Orange</material>
+        </gazebo>
+
+    </xacro:macro>
+</robot>

@@ -1,0 +1,215 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro"  name="robot">
+
+    <!-- Constants of the robot dimensions, should be made to variables -->
+    <xacro:property name="link_1_length" value="0.2" />
+    <xacro:property name="link_1_side" value="0.1" />
+    <xacro:property name="link_2_length" value="1" />
+    <xacro:property name="link_2_side" value="0.1" />
+    <xacro:property name="link_3_length" value="1" />
+    <xacro:property name="link_3_side" value="0.1" />
+    <xacro:property name="link_4_length" value="0.2" />
+    <xacro:property name="link_4_side" value="0.1" />
+    <xacro:property name="link_5_length" value="0.3" />
+    <xacro:property name="link_5_side" value="0.1" />
+    <xacro:property name="link_6_length" value="0.1" />
+    <xacro:property name="link_6_side" value="0.1" />
+    <!-- Constants of the robot -->
+    <xacro:property name="joint_damping" value="10.0"/>
+    <xacro:property name="joint_friction" value="0.1"/>
+    <xacro:property name="max_effort" value="300"/>
+    <xacro:property name="max_velocity" value="10"/>
+
+    <!-- Includes -->
+    <xacro:include filename="robot_materials.xacro" />
+    <xacro:include filename="robot_inertia_functions.xacro" />
+    <xacro:include filename="robot.gazebo.xacro" />
+    <xacro:include filename="robot.ros2_control.xacro" />
+
+    <!-- macro for create URDF -->
+    <xacro:macro name="create_robot" params="parent:=|world robot_name:=^|robot">
+
+        <!-- Joint between parent and base link -->
+        <joint name="${parent}_${robot_name}_joint" type="fixed">
+            <parent link="${parent}"/>
+            <child link="${robot_name}_link_0"/>
+        </joint>
+
+        <!-- Joints in the robot -->
+        <joint name="${robot_name}_joint_1" type="revolute">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <parent link="${robot_name}_link_0"/>
+            <child link="${robot_name}_link_1"/>
+            <axis xyz="0 0 1"/>
+            <limit lower="${-pi}" upper="${pi}" velocity="${max_velocity}" effort="${max_effort}"/> 
+            <dynamics damping="${joint_damping}" friction="${joint_friction}"/>
+        </joint>
+
+        <joint name="${robot_name}_joint_2" type="revolute">
+            <origin xyz="${(link_2_side/2)+(link_1_side/2)} 0 ${link_1_length}" rpy="0 0 0"/>
+            <parent link="${robot_name}_link_1"/>
+            <child link="${robot_name}_link_2"/>
+            <axis xyz="1 0 0"/>
+            <limit lower="${-pi}" upper="${pi}" velocity="${max_velocity}" effort="${max_effort}"/> 
+            <dynamics damping="${joint_damping}" friction="${joint_friction}"/>
+        </joint>
+
+        <joint name="${robot_name}_joint_3" type="revolute">
+            <origin xyz="${-((link_3_side/2)+(link_2_side/2))} 0 ${link_2_length}" rpy="0 0 0"/>
+            <parent link="${robot_name}_link_2"/>
+            <child link="${robot_name}_link_3"/>
+            <axis xyz="1 0 0"/>
+            <limit lower="${-pi}" upper="${pi}" velocity="${max_velocity}" effort="${max_effort}"/> 
+            <dynamics damping="${joint_damping}" friction="${joint_friction}"/>
+        </joint>
+
+        <joint name="${robot_name}_joint_4" type="revolute">
+            <origin xyz="${(link_4_side/2)+(link_3_side/2)} 0 ${link_3_length}" rpy="0 0 0"/>
+            <parent link="${robot_name}_link_3"/>
+            <child link="${robot_name}_link_4"/>
+            <axis xyz="1 0 0"/>
+            <limit lower="${-pi}" upper="${pi}" velocity="${max_velocity}" effort="${max_effort}"/> 
+            <dynamics damping="${joint_damping}" friction="${joint_friction}"/>
+        </joint>
+    
+        <joint name="${robot_name}_joint_5" type="revolute">
+            <origin xyz="0 0 ${link_4_length}" rpy="0 0 0"/>
+            <parent link="${robot_name}_link_4"/>
+            <child link="${robot_name}_link_5"/>
+            <axis xyz="0 0 1"/>
+            <limit lower="${-pi}" upper="${pi}" velocity="${max_velocity}" effort="${max_effort}"/> 
+            <dynamics damping="${joint_damping}" friction="${joint_friction}"/>
+        </joint>
+    
+        <joint name="${robot_name}_joint_6" type="revolute">
+            <origin xyz="${link_5_side/2} 0 ${link_5_length / 2}" rpy="0 0 0"/>
+            <parent link="${robot_name}_link_5"/>
+            <child link="${robot_name}_link_6"/>
+            <axis xyz="1 0 0"/>
+            <limit lower="${-pi}" upper="${pi}" velocity="${max_velocity}" effort="${max_effort}"/> 
+            <dynamics damping="${joint_damping}" friction="${joint_friction}"/>
+        </joint>
+
+        <!-- Links in the robot -->
+        <link name="${robot_name}_link_0"></link>
+
+        <link name="${robot_name}_link_1">
+            <visual>
+                <origin xyz="0 0 ${link_1_length / 2}" rpy="0 0 0" />
+                <geometry>
+                    <box size="${link_1_side} ${link_1_side} ${link_1_length}" />
+                </geometry>
+                <material name="green" />
+            </visual>
+            <collision>
+                <origin xyz="0 0 ${link_1_length / 2}" rpy="0 0 0" />
+                <geometry>
+                    <box size="${link_1_side} ${link_1_side} ${link_1_length}" />
+                </geometry>
+            </collision>
+            <xacro:inertial_box mass="0.1" x="${link_1_side}" y="${link_1_side}" z="${link_1_length}">
+                <origin xyz="0 0 ${link_1_side/2}" rpy="0 0 0"/>
+            </xacro:inertial_box>
+        </link>
+
+        <link name="${robot_name}_link_2">
+            <visual>
+                <origin xyz="0 0 ${link_2_length / 2}" rpy="0 0 0" />
+                <geometry>
+                    <box size="${link_2_side} ${link_2_side} ${link_2_length}" />
+                </geometry>
+                <material name="green" />
+            </visual>
+            <collision>
+                <origin xyz="0 0 ${link_2_length / 2}" rpy="0 0 0" />
+                <geometry>
+                    <box size="${link_2_side} ${link_2_side} ${link_2_length}" />
+                </geometry>
+            </collision>
+            <xacro:inertial_box mass="0.1" x="${link_2_side}" y="${link_2_side}" z="${link_2_length}">
+                <origin xyz="0 0 ${link_2_side/2}" rpy="0 0 0"/>
+            </xacro:inertial_box>
+        </link>
+    
+        <link name="${robot_name}_link_3">
+            <visual>
+                <origin xyz="0 0 ${link_3_length / 2}" rpy="0 0 0" />
+                <geometry>
+                    <box size="${link_3_side} ${link_3_side} ${link_3_length}" />
+                </geometry>
+                <material name="green" />
+            </visual>
+            <collision>
+                <origin xyz="0 0 ${link_3_length / 2}" rpy="0 0 0" />
+                <geometry>
+                    <box size="${link_3_side} ${link_3_side} ${link_3_length}" />
+                </geometry>
+            </collision>
+            <xacro:inertial_box mass="0.1" x="${link_3_side}" y="${link_3_side}" z="${link_3_length}">
+                <origin xyz="0 0 ${link_3_side/2}" rpy="0 0 0"/>
+            </xacro:inertial_box>
+        </link>
+        
+        <link name="${robot_name}_link_4">
+            <visual>
+                <origin xyz="0 0 ${link_4_length / 2}" rpy="0 0 0" />
+                <geometry>
+                    <box size="${link_4_side} ${link_4_side} ${link_4_length}" />
+                </geometry>
+                <material name="green" />
+            </visual>
+            <collision>
+                <origin xyz="0 0 ${link_4_length / 2}" rpy="0 0 0" />
+                <geometry>
+                    <box size="${link_4_side} ${link_1_side} ${link_4_length}" />
+                </geometry>
+            </collision>
+            <xacro:inertial_box mass="0.1" x="${link_1_side}" y="${link_4_side}" z="${link_4_length}">
+                <origin xyz="0 0 ${link_4_side/2}" rpy="0 0 0"/>
+            </xacro:inertial_box>
+        </link>
+        
+        <link name="${robot_name}_link_5">
+            <visual>
+                <origin xyz="0 0 ${link_5_length / 2}" rpy="0 0 0" />
+                <geometry>
+                    <box size="${link_5_side} ${link_5_side} ${link_5_length}" />
+                </geometry>
+                <material name="green" />
+            </visual>
+            <collision>
+                <origin xyz="0 0 ${link_5_length / 2}" rpy="0 0 0" />
+                <geometry>
+                    <box size="${link_5_side} ${link_5_side} ${link_5_length}" />
+                </geometry>
+            </collision>
+            <xacro:inertial_box mass="0.1" x="${link_5_side}" y="${link_5_side}" z="${link_5_length}">
+                <origin xyz="0 0 ${link_5_side/2}" rpy="0 0 0"/>
+            </xacro:inertial_box>
+        </link>
+        
+        <link name="${robot_name}_link_6">
+            <visual>
+                <origin xyz="${link_6_length / 2} 0 0" rpy="0 0 0" />
+                <geometry>
+                    <box size="${link_6_length} ${link_6_side} ${link_6_side}" />
+                </geometry>
+                <material name="green" />
+            </visual>
+            <collision>
+                <origin xyz="${link_6_length / 2} 0 0" rpy="0 0 0" />
+                <geometry>
+                    <box size="${link_6_length} ${link_6_side} ${link_6_side}" />
+                </geometry>
+            </collision>
+            <xacro:inertial_box mass="0.1" x="${link_6_length}" y="${link_6_side}" z="${link_6_side}">
+                <origin xyz="${link_6_length / 2} 0 0" rpy="0 0 0"/>
+            </xacro:inertial_box>
+        </link>
+
+        <!-- gazebo plugin from xacro file -->
+        <xacro:robot_gazebo robot_name="${robot_name}"/>
+        <xacro:robot_hardware_interface robot_name="${robot_name}"/>
+    </xacro:macro>
+
+</robot>
